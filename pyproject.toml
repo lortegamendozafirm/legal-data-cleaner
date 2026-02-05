@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "legal-data-cleaner"
+version = "1.0.0"
+description = "Estandarización de identidad para datos legales - Equipo de Eficiencia Operativa"
+requires-python = ">=3.9"
+dependencies = [
+    "unidecode>=1.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+]

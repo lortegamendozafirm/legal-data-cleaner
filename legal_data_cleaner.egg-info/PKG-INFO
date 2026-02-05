@@ -1,0 +1,8 @@
+Metadata-Version: 2.4
+Name: legal-data-cleaner
+Version: 1.0.0
+Summary: Estandarización de identidad para datos legales - Equipo de Eficiencia Operativa
+Requires-Python: >=3.9
+Requires-Dist: unidecode>=1.3
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"

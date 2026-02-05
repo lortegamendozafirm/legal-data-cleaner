@@ -1,0 +1,10 @@
+pyproject.toml
+legal_data_cleaner/__init__.py
+legal_data_cleaner/cleaner.py
+legal_data_cleaner/constants.py
+legal_data_cleaner/validator.py
+legal_data_cleaner.egg-info/PKG-INFO
+legal_data_cleaner.egg-info/SOURCES.txt
+legal_data_cleaner.egg-info/dependency_links.txt
+legal_data_cleaner.egg-info/requires.txt
+legal_data_cleaner.egg-info/top_level.txt
