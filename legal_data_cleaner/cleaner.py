@@ -1,66 +1,63 @@
-"""Lógica de transformación y estandarización de nombres."""
+"""cleaner.py: Lógica de transformación y estandarización de nombres."""
 
 import re
-
 from unidecode import unidecode
+from legal_data_cleaner.constants import NOISE_WORDS
 
-from .constants import NOISE_WORDS
-
+def _strip_non_alpha(text: str) -> str:
+    """Replica "^[^A-Za-z]+|[^A-Za-z]+$" de R para limpiar extremos."""
+    # Eliminamos lo que no sea letra al inicio y al final
+    return re.sub(r"^[^A-Za-z]+|[^A-Za-z]+$", "", text).strip()
 
 def standardize_name(raw_name: str) -> str:
-    """Transforma un nombre crudo a formato canónico ASCII en mayúsculas.
-
-    Proceso:
-        1. Quita espacios en los extremos.
-        2. Elimina contenido entre paréntesis.
-        3. Remueve acentos y convierte ñ -> n (via unidecode).
-        4. Elimina caracteres especiales no alfanuméricos.
-        5. Remueve palabras clave de ruido definidas en constants.
-        6. Convierte a mayúsculas.
-
-    Args:
-        raw_name: Cualquier string proveniente de un input humano.
-
-    Returns:
-        Nombre estandarizado en ASCII mayúsculas.
-
-    Example:
-        >>> standardize_name("  Peña, José (Lead Visa T) ")
-        'JOSE PENA'
-    """
     if not raw_name or not isinstance(raw_name, str):
         return ""
 
-    # 1. Quitar espacios en los extremos
+    # 1. Limpieza inicial
     name = raw_name.strip()
 
-    # 2. Eliminar contenido entre paréntesis (incluyendo los paréntesis)
-    name = re.sub(r"\([^)]*\)", "", name)
+    # 2. Eliminar paréntesis y corchetes (reemplazo con "" para evitar espacios extras)
+    name = re.sub(r"\([^)]*\)|\[[^\]]*\]", "", name)
+    name = _strip_non_alpha(name)
 
-    # 2b. Manejar formato "Apellido, Nombre" -> "Nombre Apellido"
-    if "," in name:
+    # 3. Formato "Apellido, Nombre"
+    if name.count(",") == 1:
         parts = [p.strip() for p in name.split(",", 1)]
-        if len(parts) == 2 and parts[0] and parts[1]:
+        if len(parts) == 2:
             name = f"{parts[1]} {parts[0]}"
+            name = _strip_non_alpha(name)
 
-    # 3. Remueve acentos y convierte ñ -> n via transliteración ASCII
+    # 4. Transliteración (Acentos y Ñ)
     name = unidecode(name)
 
-    # 4. Eliminar caracteres especiales no alfanuméricos (mantener letras y espacios)
-    name = re.sub(r"[^A-Za-z\s]", " ", name)
+    # 5. Remover números
+    name = re.sub(r"\d", "", name)
+    name = _strip_non_alpha(name)
 
-    # 6. Convertir a mayúsculas (antes de filtrar ruido para comparar con el set)
+    # 6. Mayúsculas
     name = name.upper()
 
-    # 5. Remover palabras clave de ruido
+    # 7. Filtrado de Ruido y Letras Sueltas
+    # Aquí sí usamos split() porque ya queremos evaluar palabras individuales
     words = name.split()
-    words = [w for w in words if w not in NOISE_WORDS]
+    cleaned_words = []
+    
+    for w in words:
+        # Limpiamos cada palabra de caracteres no alfa en sus propios extremos
+        clean_w = re.sub(r"^[^A-Z]+|[^A-Z]+$", "", w)
+        
+        # Mantener si es un símbolo especial (ej. &, +, ;)
+        if len(w) == 1 and not w.isalpha():
+            cleaned_words.append(w)
+        # Mantener si no es ruido y mide más de 1 letra
+        elif clean_w not in NOISE_WORDS and len(clean_w) > 1:
+            cleaned_words.append(clean_w)
 
-    # Unir y eliminar espacios redundantes
-    name = " ".join(words)
-
-    return name
-
+    # Unimos con un solo espacio
+    name = " ".join(cleaned_words)
+    
+    # 8. Limpieza final absoluta de extremos
+    return _strip_non_alpha(name)
 
 def check_identity_match(name_a: str, name_b: str) -> bool:
     """Compara dos nombres usando igualdad estricta tras la limpieza.

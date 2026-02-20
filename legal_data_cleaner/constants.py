@@ -1,20 +1,21 @@
-"""Diccionarios de palabras de ruido a eliminar durante la estandarización."""
+"""constants.py: Diccionarios de palabras de ruido a eliminar."""
 
-# Palabras clave que se consideran ruido y deben ser removidas del nombre.
-# Incluye términos legales, de estado de caso y metadatos manuales.
+# Lista expandida basada en el análisis de carpetas y procesos legales
 NOISE_WORDS = {
-    "LEAD",
-    "VISA",
-    "PROCESADO",
-    "CLIENTE",
-    "CASO",
-    "CASE",
-    "NEW",
-    "NUEVO",
-    "PENDING",
-    "PENDIENTE",
-    "CLOSED",
-    "CERRADO",
-    "ACTIVE",
-    "ACTIVO",
+    "LEAD", "PROCESADO", "CLIENTE", "CASO", "CASE", "NEW", "NUEVO",
+    "PENDING", "PENDIENTE", "CLOSED", "CERRADO", "ACTIVE", "ACTIVO",
+    "TRUCKER", "TRUCKERS", "CBP", "FOIA", "CONSULAR", "PROCESS",
+    "OBTENCION", "REPORTE", "POLICIAL", "REG", "AOS", "COYOTE", 
+    "T", "VISA", "DOMESTIC", "VIOLENCE", "LABOR", "U CERTIFICATION", 
+    "VAWA", "DA", "SIGN", "UP", "RECORDING", "SUPPORTING",
+    "DOCUMENTS", "MATERIALS", "SUBMMISION", "SUBMISSION",
+    "PROCESSING", "RECORDINGS", "ATTORNEY", "NOTES", "FBI",
+    "RESULTS", "CLIENTS", "COMMUNICATION", "SUBMMISIONS",
+    "UCIS", "RECEIPTS", "NOTICES", "USCIS", "DOCUMENTOS",
+    "COURT", "BILLS", "RECEIPST", "COMMUNICATIONS", "FORMS", "CLIENT",
+    "SUBMISSIONS", "SUPPOTING", "SUBMMIS", "REVIEW", "ATTY", "NOTICE",
+    "RECIEPTS", "CORRESPONDANCE", "AFTER",  "P\+", "CDMX", "ORGANIC",
+    "EDITED", "SPANISH", "SIGNED", "DCL", "CORRESPONDENCE",
+    "NUEVA", "CARPETA", "PSYCHOLOGY", "FOLLOW", "INTERVIEW",
+    "THERAPY", "EVIDENCE", "OF", "PSYCH", "AOS"
 }
